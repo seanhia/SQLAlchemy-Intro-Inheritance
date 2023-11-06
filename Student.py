@@ -80,6 +80,13 @@ class Student(Base):
                 self.majors.remove(next_major)
                 return
 
+#from ManyToMany Section.py
+    def add_section(self, section):
+        for next_section in self.sections:
+            if next_section.student == section:
+                return
+        enrollment = Enrollment(self, section)
+
     def remove_section(self, section):
         for next_section in self.sections:
             if next_section.section == section:

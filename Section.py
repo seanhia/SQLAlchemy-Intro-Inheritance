@@ -1,7 +1,7 @@
 from typing import List
 from orm_base import Base
 from sqlalchemy import UniqueConstraint, ForeignKeyConstraint, CheckConstraint
-from sqlalchemy import String
+from sqlalchemy import String, Integer, Identity
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from Course import Course
 from Enrollment import Enrollment
@@ -33,6 +33,8 @@ class Section(Base):
     instructor: Mapped[str] = mapped_column("instructor", String(80))
     students: Mapped[List["Enrollment"]] = relationship(back_populates="section",
                                                         cascade="all, save-update, delete-orphan")
+    #from ManyToMany Section.py -> surrogate
+    sectionID: Mapped[int] = mapped_column('section_id', Integer, Identity(start=1, cycle=True), primary_key=True)
 
     __table_args__ = (UniqueConstraint("semester", "section_year", "schedule",
                                        "start_time", "building", "room",
@@ -40,6 +42,10 @@ class Section(Base):
                       UniqueConstraint("semester", "section_year", "schedule",
                                        "start_time", "instructor",
                                        name="sections_uk_02"),
+                      UniqueConstraint("department_abbreviation", "course_number",
+                                       "section_number", "semester",
+                                       "section_year",
+                                       name="sections_uk_03"),
                       ForeignKeyConstraint([departmentAbbreviation, courseNumber],
                                            [Course.departmentAbbreviation,
                                             Course.courseNumber],
@@ -64,7 +70,7 @@ class Section(Base):
             if next_student.student == student:
                 return
         enrollment = Enrollment(self, student)
-
+#used 'remove_enrollment' in main so may have to change method names to match
     def remove_student(self, student):
         for next_student in self.students:
             if next_student.student == student:
