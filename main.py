@@ -314,6 +314,27 @@ def add_student_section(sess):
     sess.flush()
 
 
+def add_student_LetterGrade(sess):
+    student: Student
+    section: Section
+    unique_student_section: bool = False
+    while not unique_student_section:
+        student = select_student(sess)
+        section = select_section(sess)
+        pk_count: int = count_student_section(sess, student, section)
+        unique_student_section = pk_count == 0;
+        if not unique_student_section:
+            print("That section already has a student enrolled in it. Try again.")
+    grades = ['A', 'B', 'C', 'D', 'F']
+    user_grade = input("Enter the letter grade for enrollment--> ")
+    while user_grade not in grades:
+        print("Not a valid grade. Must be A, B, C, D, or F. Try again.")
+        user_grade = input("Enter the letter grade for enrollment--> ")
+    letter_grade = LetterGrade(section, student, user_grade)
+    sess.add(letter_grade)
+    sess.flush()
+
+
 def add_student_PassFail(sess):
     """
     Add a student to a section as a pass/fail.
