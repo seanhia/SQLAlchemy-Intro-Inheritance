@@ -5,12 +5,13 @@ from Enrollment import Enrollment
 
 class LetterGrade(Enrollment):
     __tablename__ = "letter_grade"
+
+    letterGrade: Mapped[str] = mapped_column("letter_grade",
+                                             ForeignKey("enrollments.enrollment_id", ondelete="CASCADE"),
+                                             primary_key=True)
     minSatisfactory: Mapped[str] = mapped_column("min_satisfactory", String(10), nullable=False)
-    letterGrade: Mapped[str] = mapped_column("letter_grade",  ForeignKey("enrollments.enrollment_id", ondelete="CASCADE"), primary_key=True)
 
     __mapper_args__ = {"polymorphic_identity":"letter_grade"}
-    __table_args__ = (UniqueConstraint("letter_grade",
-                                       name="letterGrade_uk_01"))
 
     def __init__(self, section, student, minSatisfactory: str):
         super().__init__(section, student)
