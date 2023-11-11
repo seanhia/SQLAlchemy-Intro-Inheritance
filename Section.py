@@ -46,6 +46,7 @@ class Section(Base):
                                        "section_number", "semester",
                                        "section_year",
                                        name="sections_uk_03"),
+                      UniqueConstraint("section_id", name="sections_uk_04"),
                       ForeignKeyConstraint([departmentAbbreviation, courseNumber],
                                            [Course.departmentAbbreviation,
                                             Course.courseNumber],

@@ -13,6 +13,7 @@ from StudentMajor import StudentMajor
 from Enrollment import Enrollment
 from Section import Section
 from PassFail import PassFail
+from LetterGrade import LetterGrade
 from Option import Option
 from Menu import Menu
 import IPython
@@ -328,8 +329,11 @@ def add_student_LetterGrade(sess):
     grades = ['A', 'B', 'C', 'D', 'F']
     user_grade = input("Enter the letter grade for enrollment--> ")
     while user_grade not in grades:
-        print("Not a valid grade. Must be A, B, C, D, or F. Try again.")
-        user_grade = input("Enter the letter grade for enrollment--> ")
+        try:
+            raise ValueError("Not a valid grade. Must be A, B, C, D, or F. Try again.")
+        except ValueError as e:
+            print("Could not add that letter grade. Check your error: ", e)
+            user_grade = input("Enter the letter grade for enrollment--> ")
     letter_grade = LetterGrade(section, student, user_grade)
     sess.add(letter_grade)
     sess.flush()

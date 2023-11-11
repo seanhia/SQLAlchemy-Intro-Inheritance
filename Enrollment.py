@@ -52,7 +52,7 @@ class Enrollment(Base):
     # names, I got errors, and I'm not able to tell you why that is.  BUT, if I used the
     # table column names, that worked.  Not sure what the deep reason for that is.
     ### not sure if we need these, ask prof ###
-    # __table_args__ = (UniqueConstraint("department_abbreviation", "course_number",
+    __table_args__ = (UniqueConstraint("enrollment_id", name="enrollment_uk_01"),)
     #                                    "section_number", "section_year", "semester",
     #                                    "student_id", name="enrollment_uk_01"),
     #                   ForeignKeyConstraint(["department_abbreviation", "course_number",
