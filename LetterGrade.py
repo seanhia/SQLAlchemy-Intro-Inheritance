@@ -15,7 +15,7 @@ class LetterGrade(Enrollment):
 
     def __init__(self, section, student, min_satisfactory: String):
         super().__init__(section, student)
-        self.minSatisfactory = minSatisfactory
+        self.minSatisfactory = min_satisfactory
 
     def __str__(self):
         return f"Letter Grade: {super().__str__()}"

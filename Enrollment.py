@@ -22,18 +22,18 @@ class Enrollment(Base):
     # # I decided to demonstrate that you COULD do the relationship from Section to
     # # Enrollment without resorting to a surrogate in Section.  Rather a lot of work
     # # to do so, but it IS possible, as you can see below.
-    # departmentAbbreviation: Mapped[str] = mapped_column("department_abbreviation",
-    #                                                     nullable=False)
-    # courseNumber: Mapped[int] = mapped_column("course_number",
-    #                                           nullable=False)
-    # sectionNumber: Mapped[int] = mapped_column("section_number",
-    #                                            nullable=False)
+    departmentAbbreviation: Mapped[str] = mapped_column("department_abbreviation",
+                                                         nullable=False)
+    courseNumber: Mapped[int] = mapped_column("course_number",
+                                               nullable=False)
+    sectionNumber: Mapped[int] = mapped_column("section_number",
+                                                nullable=False)
     # # Since no one will input the semester directly (it comes from Section), I
     # # am removing the check constraint as it would be redundant.  The check
     # # constraint here could get out of sync with the one in Section
-    # semester: Mapped[str] = mapped_column("semester", String(20),
-    #                                       nullable=False)
-    # sectionYear: Mapped[int] = mapped_column("section_year", nullable=False)
+    semester: Mapped[str] = mapped_column("semester", String(20),
+                                           nullable=False)
+    sectionYear: Mapped[int] = mapped_column("section_year", nullable=False)
     student: Mapped["Student"] = relationship(back_populates="sections")
     studentID: Mapped[int] = mapped_column("student_id", ForeignKey("students.student_id"),
                                            primary_key=True,
@@ -67,11 +67,11 @@ class Enrollment(Base):
     def __init__(self, section, student):
         self.section = section
         self.sectionID = section.sectionID
-        # self.departmentAbbreviation = section.departmentAbbreviation
-        # self.courseNumber = section.courseNumber
-        # self.sectionNumber = section.sectionNumber
-        # self.semester = section.semester
-        # self.sectionYear = section.sectionYear
+        self.departmentAbbreviation = section.departmentAbbreviation
+        self.courseNumber = section.courseNumber
+        self.sectionNumber = section.sectionNumber
+        self.semester = section.semester
+        self.sectionYear = section.sectionYear
         self.student = student
         self.studentID = student.studentID
 
