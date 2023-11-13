@@ -3,6 +3,10 @@ from datetime import time, datetime
 from menu_definitions import menu_main, add_menu, delete_menu, list_menu, semester_menu, schedule_menu, debug_select
 from db_connection import engine, Session
 from orm_base import metadata
+
+from IntrospectionFactory import IntrospectionFactory
+from constants import *
+
 # Note that until you import your SQLAlchemy declarative classes, such as Student, Python
 # will not execute that code, and SQLAlchemy will be unaware of the mapped table.
 from Department import Department
@@ -909,10 +913,16 @@ if __name__ == '__main__':
     # for more logging messages, set the level to logging.DEBUG.
     logging.getLogger("sqlalchemy.pool").setLevel(eval(logging_action))
 
-    metadata.drop_all(bind=engine)  # start with a clean slate while in development
+    introspection_mode: int = IntrospectionFactory().introspection_type
+    if introspection_mode == START_OVER:
+        print("starting over")
+
+        metadata.drop_all(bind=engine)  # start with a clean slate while in development
 
     # Create whatever tables are called for by our "Entity" classes.
-    metadata.create_all(bind=engine)
+        metadata.create_all(bind=engine)
+    elif introspection_mode == REUSE_NO_INTROSPECTION:
+        print("Assuming tables match class definitions")
 
     with Session() as sess:
         main_action: str = ''
